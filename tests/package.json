@@ -1,0 +1,12 @@
+{
+  "name": "todo-life-dashboard-tests",
+  "version": "1.0.0",
+  "description": "Property-based tests for the To-Do Life Dashboard",
+  "private": true,
+  "scripts": {
+    "test": "node property-tests.js"
+  },
+  "devDependencies": {
+    "fast-check": "3.22.0"
+  }
+}

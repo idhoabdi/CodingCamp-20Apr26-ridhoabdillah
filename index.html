@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do Life Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== Top Bar ===== -->
+  <header class="top-bar" role="banner">
+    <h1 class="app-title">Life Dashboard</h1>
+    <div class="top-bar__actions">
+      <button
+        id="settings-toggle"
+        class="btn btn--icon"
+        type="button"
+        aria-label="Open settings"
+        title="Settings"
+        aria-expanded="false"
+        aria-controls="settings-modal"
+      >
+        <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+      <button
+        id="theme-toggle"
+        class="btn btn--icon"
+        type="button"
+        aria-label="Toggle light/dark theme"
+        title="Toggle theme"
+      >
+        <span class="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== Settings Modal ===== -->
+  <div
+    id="settings-modal"
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="settings-modal-title"
+    hidden
+  >
+    <div class="modal__backdrop" id="settings-backdrop"></div>
+    <div class="modal__panel" role="document">
+      <div class="modal__header">
+        <h2 id="settings-modal-title" class="modal__title">Settings</h2>
+        <button
+          id="settings-close"
+          class="btn btn--icon modal__close"
+          type="button"
+          aria-label="Close settings"
+        >
+          <svg class="icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal__body">
+        <!-- Name form -->
+        <form
+          id="name-form"
+          class="settings__name-form"
+          aria-label="Set your name"
+          novalidate
+        >
+          <label for="name-input" class="form-label">Your name</label>
+          <div class="input-row">
+            <input
+              id="name-input"
+              class="input"
+              type="text"
+              placeholder="Enter your name…"
+              maxlength="60"
+              autocomplete="given-name"
+              aria-describedby="name-hint"
+            />
+            <button class="btn btn--primary" type="submit">Save</button>
+          </div>
+          <p id="name-hint" class="form-hint">
+            Updates the greeting above.
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Hero Strip — Greeting & Clock (outside any section) ===== -->
+  <div class="hero" role="region" aria-label="Greeting and current time">
+    <div class="hero__greeting">
+      <p id="greeting-message" class="hero__message" aria-live="polite">
+        <!-- e.g. Good Morning, Friend! -->
+      </p>
+      <p id="date-display" class="hero__date" aria-live="off" aria-label="Current date">
+        <!-- e.g. Monday, July 14, 2025 -->
+      </p>
+    </div>
+    <output id="clock-display" class="hero__clock" aria-live="off" aria-label="Current time">
+      00:00:00
+    </output>
+  </div>
+
+  <!-- ===== Main Dashboard Grid ===== -->
+  <main class="dashboard" role="main">
+
+    <!-- ── Panel 2: Focus Timer ── -->
+    <section
+      id="timer-panel"
+      class="panel panel--timer"
+      aria-labelledby="timer-heading"
+    >
+      <h2 id="timer-heading" class="panel__title">Focus Timer</h2>
+
+      <output
+        id="timer-display"
+        class="timer__display"
+        aria-live="off"
+        aria-label="Timer remaining"
+        role="timer"
+      >
+        25:00
+      </output>
+
+      <div class="timer__controls" role="group" aria-label="Timer controls">
+        <button
+          id="timer-start"
+          class="btn btn--primary"
+          type="button"
+          aria-label="Start timer"
+        >
+          Start
+        </button>
+        <button
+          id="timer-stop"
+          class="btn btn--secondary"
+          type="button"
+          aria-label="Stop timer"
+          disabled
+        >
+          Stop
+        </button>
+        <button
+          id="timer-reset"
+          class="btn btn--ghost"
+          type="button"
+          aria-label="Reset timer"
+        >
+          Reset
+        </button>
+      </div>
+
+      <!-- Visual notification shown when timer ends -->
+      <div
+        id="timer-notification"
+        class="timer__notification"
+        role="alert"
+        aria-live="assertive"
+        hidden
+      >
+        ⏰ Time's up! Take a break.
+      </div>
+    </section>
+
+    <!-- ── Panel 3: Task List ── -->
+    <section
+      id="task-panel"
+      class="panel panel--tasks"
+      aria-labelledby="task-heading"
+    >
+      <h2 id="task-heading" class="panel__title">Tasks</h2>
+
+      <!-- Add-task form -->
+      <form
+        id="task-form"
+        class="task__add-form"
+        aria-label="Add a new task"
+        novalidate
+      >
+        <div class="input-row">
+          <input
+            id="task-input"
+            class="input"
+            type="text"
+            placeholder="Add a new task…"
+            maxlength="200"
+            autocomplete="off"
+            aria-describedby="task-validation"
+            aria-required="true"
+          />
+          <button class="btn btn--primary" type="submit" aria-label="Add task">
+            Add
+          </button>
+        </div>
+        <p
+          id="task-validation"
+          class="validation-message"
+          role="alert"
+          aria-live="polite"
+          hidden
+        >
+          Task description cannot be empty.
+        </p>
+      </form>
+
+      <!-- Filter controls -->
+      <div
+        class="task__filters"
+        role="group"
+        aria-label="Filter tasks"
+      >
+        <button
+          id="filter-all"
+          class="btn btn--filter btn--filter-active"
+          type="button"
+          data-filter="all"
+          aria-pressed="true"
+        >
+          All
+        </button>
+        <button
+          id="filter-active"
+          class="btn btn--filter"
+          type="button"
+          data-filter="active"
+          aria-pressed="false"
+        >
+          Active
+        </button>
+        <button
+          id="filter-completed"
+          class="btn btn--filter"
+          type="button"
+          data-filter="completed"
+          aria-pressed="false"
+        >
+          Completed
+        </button>
+      </div>
+
+      <!-- Task list -->
+      <ul
+        id="task-list"
+        class="task__list"
+        role="list"
+        aria-label="Task list"
+        aria-live="polite"
+      >
+        <!-- Task items injected by renderTasks() -->
+      </ul>
+
+      <!-- Empty-state message (shown by JS when list is empty) -->
+      <p
+        id="task-empty"
+        class="empty-state"
+        aria-live="polite"
+        hidden
+      >
+        No tasks here. Add one above!
+      </p>
+    </section>
+
+    <!-- ── Panel 4: Quick Links ── -->
+    <section
+      id="quicklinks-panel"
+      class="panel panel--quicklinks"
+      aria-labelledby="quicklinks-heading"
+    >
+      <h2 id="quicklinks-heading" class="panel__title">Quick Links</h2>
+
+      <!-- Add quick-link form -->
+      <form
+        id="quicklink-form"
+        class="quicklinks__add-form"
+        aria-label="Add a quick link"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="quicklink-label-input" class="form-label">Label</label>
+          <input
+            id="quicklink-label-input"
+            class="input"
+            type="text"
+            placeholder="e.g. GitHub"
+            maxlength="60"
+            autocomplete="off"
+            aria-describedby="quicklink-validation"
+            aria-required="true"
+          />
+        </div>
+        <div class="form-group">
+          <label for="quicklink-url-input" class="form-label">URL</label>
+          <input
+            id="quicklink-url-input"
+            class="input"
+            type="url"
+            placeholder="https://example.com"
+            maxlength="2048"
+            autocomplete="url"
+            aria-describedby="quicklink-validation"
+            aria-required="true"
+          />
+        </div>
+        <button class="btn btn--primary" type="submit" aria-label="Add quick link">
+          Add Link
+        </button>
+        <p
+          id="quicklink-validation"
+          class="validation-message"
+          role="alert"
+          aria-live="polite"
+          hidden
+        >
+          Please enter a valid label and URL.
+        </p>
+      </form>
+
+      <!-- Quick links container -->
+      <div
+        id="quicklinks-container"
+        class="quicklinks__list"
+        role="list"
+        aria-label="Quick links"
+        aria-live="polite"
+      >
+        <!-- Quick link items injected by renderQuickLinks() -->
+      </div>
+
+      <!-- Empty-state message -->
+      <p
+        id="quicklinks-empty"
+        class="empty-state"
+        aria-live="polite"
+        hidden
+      >
+        No quick links yet. Add one above!
+      </p>
+    </section>
+
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
